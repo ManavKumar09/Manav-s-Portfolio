@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --admin-bg: #070708;
+  --admin-card: rgba(18, 18, 22, 0.7);
+  --admin-text: #f5f5f7;
+  --admin-text-light: #8e8e93;
+  --admin-border: rgba(255, 255, 255, 0.08);
+  --admin-input-bg: #0f0f12;
+  
+  --accent-purple: #a64eff;
+  --accent-pink: #ff3b7e;
+  --accent-orange: #ff9500;
+  --accent-gradient: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 50%, var(--accent-orange) 100%);
+  --shadow-glow: 0 0 20px rgba(166, 78, 255, 0.15);
+  
+  --sans: 'Outfit', 'Inter', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  background-color: var(--admin-bg);
+  color: var(--admin-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Syne', 'Outfit', sans-serif;
+  color: var(--admin-text);
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: radial-gradient(circle at center, rgba(166, 78, 255, 0.05) 0%, transparent 70%);
+}
+
+.login-card {
+  background: var(--admin-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--admin-border);
+}
+
+.login-card h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 28px;
+  text-align: center;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--admin-text-light);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--admin-input-bg);
+  color: var(--admin-text);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  font-family: var(--sans);
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 10px rgba(166, 78, 255, 0.1);
+}
+
+.login-btn, .btn-primary {
+  width: 100%;
+  padding: 14px 28px;
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary {
+  width: auto;
+  margin-top: 0;
+}
+
+.login-btn:hover, .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.error-message {
+  background-color: rgba(255, 59, 126, 0.1);
+  color: var(--accent-pink);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid rgba(255, 59, 126, 0.2);
+}
+
+/* Dashboard Styles */
+.dashboard-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+  font-size: 32px;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 16px;
+}
+
+.tab {
+  padding: 12px 24px;
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--admin-text-light);
+  cursor: pointer;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+  box-shadow: var(--shadow-glow);
+}
+
+.tab:hover:not(.active) {
+  color: var(--admin-text);
+}
+
+/* Content Header */
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* Buttons */
+.btn-secondary {
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--admin-text);
+  border: 1px solid var(--admin-border);
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+  background: var(--admin-input-bg);
+  border-color: var(--admin-text-light);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.btn-sm.edit {
+  background: rgba(255, 149, 0, 0.1);
+  color: var(--accent-orange);
+  border: 1px solid rgba(255, 149, 0, 0.2);
+}
+.btn-sm.edit:hover {
+  background: rgba(255, 149, 0, 0.2);
+}
+.btn-sm.delete {
+  background: rgba(255, 59, 126, 0.1);
+  color: var(--accent-pink);
+  border: 1px solid rgba(255, 59, 126, 0.2);
+}
+.btn-sm.delete:hover {
+  background: rgba(255, 59, 126, 0.2);
+}
+
+/* Tables */
+.table-responsive {
+  background: var(--admin-card);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+th {
+  background-color: rgba(255, 255, 255, 0.02);
+  font-weight: 600;
+  color: var(--admin-text-light);
+  font-family: 'Syne', sans-serif;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* Forms */
+.form-card {
+  background: var(--admin-card);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 16px;
+  border: 1px solid var(--admin-border);
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}

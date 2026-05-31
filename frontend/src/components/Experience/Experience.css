@@ -1,0 +1,160 @@
+/* ====================
+   EXPERIENCE / TIMELINE
+   ==================== */
+.experience-section {
+  border-top: 1px solid var(--border-light);
+  padding: 100px 0;
+}
+
+.experience-timeline {
+  max-width: 1000px;
+  margin: 40px auto 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.timeline-row {
+  display: flex;
+  width: 100%;
+  position: relative;
+  padding: 20px 0;
+  /* Negative margin is not needed if the heights perfectly align, but let's use it just in case to connect curves */
+}
+
+/* Winding curved line using real div for GSAP animation */
+.timeline-line {
+  position: absolute;
+  top: 40px; /* Start at the dot */
+  width: 50%;
+  height: calc(100% + 0px); /* Span the full row height to connect to next dot */
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  z-index: 0;
+  will-change: clip-path; /* Optimize for GSAP animation */
+}
+
+/* Left curve (draws a 'C' shape facing right) */
+.timeline-row.left .timeline-line {
+  right: 50%;
+  border-right: none;
+  border-radius: 60px 0 0 60px;
+}
+
+/* Right curve (draws a 'C' shape facing left) */
+.timeline-row.right .timeline-line {
+  left: 50%;
+  border-left: none;
+  border-radius: 0 60px 60px 0;
+}
+
+/* Remove bottom return for the last item so the timeline just ends */
+.timeline-row:last-child .timeline-line {
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  height: calc(100% - 40px); /* Don't overshoot the last card */
+}
+
+/* Layout for the cards themselves */
+.experience-card {
+  width: 44%; /* Leaves room for the curve */
+  padding: 32px;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+}
+
+/* Position cards on alternating sides */
+.timeline-row.left {
+  justify-content: flex-start;
+}
+
+.timeline-row.right {
+  justify-content: flex-end;
+}
+
+/* The Dot */
+.timeline-dot {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background: var(--bg-primary);
+  border: 4px solid var(--accent-pink);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 15px rgba(255, 59, 126, 0.5);
+  transition: var(--transition-smooth);
+}
+
+.timeline-row:hover .timeline-dot {
+  transform: translate(-50%, -50%) scale(1.3);
+  background: var(--accent-pink);
+}
+
+/* Typography styles for card content */
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.exp-company {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.exp-role {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-purple);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.exp-period {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+}
+
+.exp-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  /* On mobile, collapse to a single straight line on the left */
+  .timeline-line {
+    left: 20px !important;
+    right: auto !important;
+    width: 2px !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-left: 2px dashed rgba(255, 255, 255, 0.15) !important;
+  }
+  
+  .timeline-dot {
+    left: 20px !important;
+  }
+  
+  .experience-card {
+    width: calc(100% - 50px) !important;
+    margin-left: auto;
+  }
+  
+  .exp-header {
+    flex-direction: column;
+  }
+}
