@@ -10,6 +10,7 @@ dotenv.config({ override: true });
 const path = require('path');
 
 const app = express();
+app.set('trust proxy', 1); // Required for rate limiting behind a reverse proxy (like Render/Vercel)
 
 // Security Middleware
 // Set security HTTP headers, allowing images from Cloudinary
