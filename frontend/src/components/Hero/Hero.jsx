@@ -121,62 +121,65 @@ export default function Hero() {
     });
 
     mm.add("(max-width: 768px)", () => {
-      const orbit = document.querySelector('.hero-skills-orbit');
+      const cardEls = gsap.utils.toArray('.hero-skill-card');
+      const numCards = cardEls.length;
 
-      const updateCoverflow = () => {
-        if (!orbit) return;
-        const orbitCards = orbit.querySelectorAll('.hero-skill-card');
-        const centerX = orbit.scrollLeft + orbit.clientWidth / 2;
-        orbitCards.forEach((card) => {
-          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-          const dist = cardCenter - centerX;
-          const maxDist = orbit.clientWidth * 0.7;
-          const ratio = Math.max(-1, Math.min(1, dist / maxDist));
-          gsap.set(card, {
-            rotateY: ratio * -50,
-            scale: 1 - Math.abs(ratio) * 0.18,
-            opacity: 1 - Math.abs(ratio) * 0.35,
-          });
+      // Set initial positions: card 0 centered, rest off-screen to the right
+      cardEls.forEach((card, i) => {
+        gsap.set(card, {
+          xPercent: i === 0 ? -50 : 150,
+          yPercent: -50,
+          opacity: i === 0 ? 1 : 0,
         });
-      };
+      });
+
+      const cardDur = 0.14; // fraction of total scroll each card takes
+      const totalEnd = `+=${120 + numCards * 80}%`;
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: heroRef.current,
           start: 'top top',
-          end: '+=200%',
+          end: totalEnd,
           pin: true,
           scrub: 1,
-          onUpdate: (self) => {
-            // Phase 0-0.15: fade out name/face
-            // Phase 0.15+: drive horizontal card scroll
-            if (self.progress > 0.15 && orbit) {
-              const cardProgress = (self.progress - 0.15) / 0.85;
-              const maxScroll = orbit.scrollWidth - orbit.clientWidth;
-              orbit.scrollLeft = cardProgress * maxScroll;
-              updateCoverflow();
-            }
-          }
         }
       });
 
-      // Phase 1: fade out name text, bio, face
-      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.1 }, 0);
-      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.9, duration: 0.12 }, 0.05);
+      // Phase 1: fade out face + name text
+      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.08 }, 0);
+      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.92, duration: 0.1 }, 0.04);
 
-      // Phase 2: ABOUT ME heading + cards appear
+      // Phase 2: ABOUT ME heading + first card appear
       tl.fromTo('.gta-about-heading',
-        { scale: 1.1, opacity: 0, y: 15 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.15, ease: 'power4.out' },
-        0.08
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.1, ease: 'power3.out' },
+        0.1
       );
-      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.1, ease: 'power3.out' }, 0.15);
+      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.08 }, 0.14);
 
-      // Run initial coverflow state
-      updateCoverflow();
+      // Phase 3: slide each card in one by one
+      cardEls.forEach((card, i) => {
+        if (i === 0) return; // first card already visible
+        const t = 0.22 + (i - 1) * cardDur;
 
-      return () => {};
+        // Previous card slides out to the left
+        tl.to(cardEls[i - 1], {
+          xPercent: -150,
+          opacity: 0,
+          duration: cardDur * 0.55,
+          ease: 'power2.inOut',
+        }, t);
+
+        // New card slides in from the right
+        tl.fromTo(card,
+          { xPercent: 150, opacity: 0 },
+          { xPercent: -50, opacity: 1, duration: cardDur * 0.7, ease: 'power2.out' },
+          t + cardDur * 0.15
+        );
+      });
     });
+
 
 
 
