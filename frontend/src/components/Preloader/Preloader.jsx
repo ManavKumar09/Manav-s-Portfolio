@@ -46,21 +46,28 @@ export default function Preloader({ onComplete }) {
       }
     }, "<"); // Run at the exact same time as the bar
 
-    // 3. Stagger out the text and bar
-    tl.to([textRef.current, '.preloader-bottom-container'], {
+    // 3. Fade out the loading bar and percentage first
+    tl.to('.preloader-bottom-container', {
       opacity: 0,
-      y: -30,
-      duration: 0.8,
-      ease: 'power3.in',
+      duration: 0.5,
+      ease: 'power2.out',
       delay: 0.2
     });
 
-    // 4. Slide the entire preloader background UP to reveal the site
+    // 4. Netflix-style massive zoom on the MK. logo
+    tl.to(textRef.current, {
+      scale: 150, // Massive zoom towards the camera
+      opacity: 0,
+      duration: 1.6,
+      ease: 'power2.in'
+    }, "-=0.2");
+
+    // 5. Fade out the background to reveal the website
     tl.to(containerRef.current, {
-      yPercent: -100,
+      opacity: 0,
       duration: 1.2,
-      ease: 'power4.inOut'
-    });
+      ease: 'power2.inOut'
+    }, "-=1.2");
 
     return () => {
       document.body.style.overflow = '';
