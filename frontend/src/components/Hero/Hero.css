@@ -373,37 +373,39 @@
     letter-spacing: 1px;
   }
 
-  /* ABOUT ME heading — absolute, top left, smaller */
   .gta-about-heading {
     position: absolute;
-    top: 75px;
+    top: 60px;
     left: 18px;
     width: calc(100% - 36px);
     z-index: 6;
   }
 
   .gta-about-text {
-    font-size: clamp(2.2rem, 11vw, 3.5rem);
+    font-size: clamp(1.8rem, 9vw, 2.8rem);
+    line-height: 0.95;
   }
 
-  /* Hide long bio text on mobile — no room */
   .gta-about-dummy {
-    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     max-width: 100%;
     margin-top: 8px;
     font-size: 0.82rem;
-    line-height: 1.5;
+    line-height: 1.4;
     color: var(--text-secondary);
   }
 
-  /* Skill cards — stacked on top of each other, GSAP moves them one by one */
+  /* Skill cards — stacked, positioned to fit below heading+bio */
   .hero-skills-stack {
     position: absolute;
-    top: 62%;
+    top: 52%;
     left: 0;
     right: 0;
     width: 100%;
-    height: 260px;
+    height: 220px;
     transform: translateY(0);
     perspective: 1000px;
   }
@@ -424,10 +426,12 @@
     top: 50%;
     left: 50%;
     width: 82vw;
-    max-width: 310px;
-    min-height: 190px;
-    padding: 20px;
+    max-width: 300px;
+    min-height: 170px;
+    max-height: 210px;
+    padding: 16px;
     transform: translate(-50%, -50%);
+    overflow: hidden;
   }
 
   .hero-skill-card .skill-desc {
