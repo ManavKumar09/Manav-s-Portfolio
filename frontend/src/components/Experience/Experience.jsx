@@ -74,7 +74,7 @@ export default function Experience() {
   useEffect(() => {
     const fetchExperience = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/public/experience');
+        const res = await axios.get('https://manav-s-portfolio.onrender.com/api/public/experience');
         setExperiences(res.data);
       } catch (err) {
         console.error('Error fetching experience:', err);

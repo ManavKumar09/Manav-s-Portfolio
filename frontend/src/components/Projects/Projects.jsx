@@ -34,7 +34,7 @@ export default function Projects() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/public/projects');
+        const res = await axios.get('https://manav-s-portfolio.onrender.com/api/public/projects');
         setProjectsData(res.data);
       } catch (err) {
         console.error('Error fetching projects:', err);

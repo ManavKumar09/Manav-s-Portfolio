@@ -31,9 +31,9 @@ export default function SkillForm({ skillToEdit, onSuccess, onCancel }) {
     
     try {
       if (skillToEdit) {
-        await axios.put(`http://localhost:5000/api/admin/skills/${skillToEdit._id}`, formData, config);
+        await axios.put(`https://manav-s-portfolio.onrender.com/api/admin/skills/${skillToEdit._id}`, formData, config);
       } else {
-        await axios.post('http://localhost:5000/api/admin/skills', formData, config);
+        await axios.post('https://manav-s-portfolio.onrender.com/api/admin/skills', formData, config);
       }
       onSuccess();
     } catch (err) {
