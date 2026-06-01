@@ -121,7 +121,7 @@ router.put('/projects/:id', upload.array('newImages', 5), async (req, res) => {
     
     projectData.images = images;
 
-    const updated = await Project.findByIdAndUpdate(req.params.id, projectData, { new: true });
+    const updated = await Project.findByIdAndUpdate(req.params.id, projectData, { returnDocument: 'after' });
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -158,7 +158,7 @@ router.put('/experience/:id', upload.single('certificate'), async (req, res) => 
     if (req.file) {
       expData.certificateUrl = req.file.path.startsWith('http') ? req.file.path : `http://localhost:5000/uploads/${req.file.filename}`;
     }
-    const updated = await Experience.findByIdAndUpdate(req.params.id, expData, { new: true });
+    const updated = await Experience.findByIdAndUpdate(req.params.id, expData, { returnDocument: 'after' });
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -187,7 +187,7 @@ router.post('/skills', async (req, res) => {
 
 router.put('/skills/:id', async (req, res) => {
   try {
-    const updated = await Skill.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updated = await Skill.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
