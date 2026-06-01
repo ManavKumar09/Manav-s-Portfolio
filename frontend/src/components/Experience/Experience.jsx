@@ -17,14 +17,15 @@ export default function Experience() {
     gsap.fromTo('.experience-section .section-title', 
       { opacity: 0, y: 50 },
       {
-        scrollTrigger: {
-          trigger: '.experience-section',
-          start: 'top 80%',
-        },
         opacity: 1,
         y: 0,
         duration: 1,
-        ease: 'power3.out'
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.experience-section',
+          start: 'top 80%',
+          toggleActions: 'play reverse play reverse'
+        }
       }
     );
   }, { scope: containerRef }); // No dependencies, runs once
@@ -63,8 +64,8 @@ export default function Experience() {
           ease: 'back.out(1.2)',
           scrollTrigger: {
             trigger: row,
-            start: 'top 50%',
-            toggleActions: 'play none none reverse'
+            start: 'top 80%',
+            toggleActions: 'play reverse play reverse'
           }
         }
       );
