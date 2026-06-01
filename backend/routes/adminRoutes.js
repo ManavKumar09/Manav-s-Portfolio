@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 const path = require('path');
 const fs = require('fs');
 const auth = require('../middleware/auth');
@@ -9,20 +11,38 @@ const Experience = require('../models/Experience');
 const Skill = require('../models/Skill');
 const Profile = require('../models/Profile');
 
-// Multer Config
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '../uploads/');
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
+if (process.env.CLOUDINARY_CLOUD_NAME) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+}
+
+let storage;
+if (process.env.CLOUDINARY_CLOUD_NAME) {
+  storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'portfolio',
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'pdf', 'gif']
     }
-    cb(null, uploadPath);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
+  });
+} else {
+  storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      const uploadPath = path.join(__dirname, '../uploads/');
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+      cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+  });
+}
 const upload = multer({ storage: storage });
 
 // Apply auth middleware to ALL routes in this file
@@ -45,7 +65,9 @@ router.post('/projects', upload.array('images', 5), async (req, res) => {
 
     // Add uploaded file paths to images array
     if (req.files && req.files.length > 0) {
-      projectData.images = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
+      projectData.images = req.files.map(file => {
+        return file.path.startsWith('http') ? file.path : `http://localhost:5000/uploads/${file.filename}`;
+      });
     } else {
       // Allow passing existing URLs as well
       if (typeof projectData.images === 'string') {
@@ -91,7 +113,9 @@ router.put('/projects/:id', upload.array('newImages', 5), async (req, res) => {
 
     // Add newly uploaded files
     if (req.files && req.files.length > 0) {
-      const newUploads = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
+      const newUploads = req.files.map(file => {
+        return file.path.startsWith('http') ? file.path : `http://localhost:5000/uploads/${file.filename}`;
+      });
       images = [...images, ...newUploads];
     }
     
@@ -118,7 +142,7 @@ router.post('/experience', upload.single('certificate'), async (req, res) => {
   try {
     const expData = { ...req.body };
     if (req.file) {
-      expData.certificateUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+      expData.certificateUrl = req.file.path.startsWith('http') ? req.file.path : `http://localhost:5000/uploads/${req.file.filename}`;
     }
     const newExp = new Experience(expData);
     const saved = await newExp.save();
@@ -132,7 +156,7 @@ router.put('/experience/:id', upload.single('certificate'), async (req, res) => 
   try {
     const expData = { ...req.body };
     if (req.file) {
-      expData.certificateUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+      expData.certificateUrl = req.file.path.startsWith('http') ? req.file.path : `http://localhost:5000/uploads/${req.file.filename}`;
     }
     const updated = await Experience.findByIdAndUpdate(req.params.id, expData, { new: true });
     res.json(updated);
