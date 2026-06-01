@@ -52,7 +52,7 @@ export default function Hero() {
 
       // The heading's bottom relative to the hero section + a gap
       const relativeBottom = headingRect.bottom - heroRect.top;
-      const gap = 20;
+      const gap = 80;
       stackEl.style.top = `${relativeBottom + gap}px`;
     };
 
