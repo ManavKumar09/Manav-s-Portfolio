@@ -399,12 +399,12 @@
   /* Skill cards — stacked on top of each other, GSAP moves them one by one */
   .hero-skills-stack {
     position: absolute;
-    top: 50%;
+    top: 62%;
     left: 0;
     right: 0;
     width: 100%;
     height: 260px;
-    transform: translateY(-30%);
+    transform: translateY(0);
     perspective: 1000px;
   }
 
