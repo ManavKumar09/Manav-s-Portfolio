@@ -1,20 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const rateLimit = require('express-rate-limit');
-
-// Strict Rate Limiting for Login to prevent brute force
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // Increased limit for development
-  message: { message: 'Too many login attempts from this IP, please try again after 15 minutes' },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
 
 // @route   POST /api/auth/login
 // @desc    Authenticate user & get token directly from .env variables
-router.post('/login', loginLimiter, async (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
