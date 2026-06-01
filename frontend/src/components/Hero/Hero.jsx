@@ -20,8 +20,8 @@ export default function Hero() {
     const fetchData = async () => {
       try {
         const [skillsRes, profileRes] = await Promise.all([
-          axios.get('https://manav-s-portfolio.onrender.com/api/public/skills'),
-          axios.get('https://manav-s-portfolio.onrender.com/api/public/profile')
+          axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/public/skills`),
+          axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/public/profile`)
         ]);
         setSkills(skillsRes.data);
         setProfile(profileRes.data);

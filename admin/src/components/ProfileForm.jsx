@@ -12,7 +12,7 @@ export default function ProfileForm() {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get('https://manav-s-portfolio.onrender.com/api/public/profile');
+      const res = await axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/public/profile`);
       if (res.data && res.data.aboutText) {
         setAboutText(res.data.aboutText);
       }
@@ -27,7 +27,7 @@ export default function ProfileForm() {
     setMessage('');
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.put('https://manav-s-portfolio.onrender.com/api/admin/profile', { aboutText }, {
+      await axios.put(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/profile`, { aboutText }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessage('Profile saved successfully!');

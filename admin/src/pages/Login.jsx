@@ -10,7 +10,7 @@ export default function Login({ setAuth }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://manav-s-portfolio.onrender.com/api/auth/login', {
+      const res = await axios.post(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/auth/login`, {
         username,
         password
       });

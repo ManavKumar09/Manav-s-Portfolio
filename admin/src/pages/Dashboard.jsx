@@ -25,9 +25,9 @@ export default function Dashboard({ setAuth }) {
   const fetchData = async () => {
     try {
       const [projRes, expRes, skillRes] = await Promise.all([
-        axios.get('https://manav-s-portfolio.onrender.com/api/public/projects'),
-        axios.get('https://manav-s-portfolio.onrender.com/api/public/experience'),
-        axios.get('https://manav-s-portfolio.onrender.com/api/public/skills')
+        axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/public/projects`),
+        axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/public/experience`),
+        axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/public/skills`)
       ]);
       setProjects(projRes.data);
       setExperience(expRes.data);
@@ -50,7 +50,7 @@ export default function Dashboard({ setAuth }) {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`https://manav-s-portfolio.onrender.com/api/admin/projects/${id}`, {
+      await axios.delete(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/projects/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -63,7 +63,7 @@ export default function Dashboard({ setAuth }) {
     if (!window.confirm('Are you sure you want to delete this experience?')) return;
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`https://manav-s-portfolio.onrender.com/api/admin/experience/${id}`, {
+      await axios.delete(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/experience/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -76,7 +76,7 @@ export default function Dashboard({ setAuth }) {
     if (!window.confirm('Are you sure you want to delete this skill card?')) return;
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`https://manav-s-portfolio.onrender.com/api/admin/skills/${id}`, {
+      await axios.delete(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/skills/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
