@@ -161,68 +161,7 @@ export default function Hero() {
         },
       }, 0.24);
     });
-
-    mm.add("(max-width: 768px)", () => {
-      const cardEls = gsap.utils.toArray('.hero-skill-card');
-      const numCards = cardEls.length;
-
-      // Set initial positions: card 0 centered, rest off-screen to the right
-      cardEls.forEach((card, i) => {
-        gsap.set(card, {
-          xPercent: i === 0 ? -50 : 150,
-          yPercent: 0,
-          opacity: i === 0 ? 1 : 0,
-        });
-      });
-
-      const cardDur = 0.14; // fraction of total scroll each card takes
-      const totalEnd = `+=${120 + numCards * 80}%`;
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: totalEnd,
-          pin: true,
-          scrub: 1,
-        }
-      });
-
-      // Phase 1: fade out face + name text
-      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.08 }, 0);
-      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.92, duration: 0.1 }, 0.04);
-
-      // Phase 2: ABOUT ME heading + first card appear
-      tl.fromTo('.gta-about-heading',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.1, ease: 'power3.out' },
-        0.1
-      );
-      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.08 }, 0.14);
-
-      // Phase 3: slide each card in one by one
-      cardEls.forEach((card, i) => {
-        if (i === 0) return; // first card already visible
-        const t = 0.22 + (i - 1) * cardDur;
-
-        // Previous card slides out to the left
-        tl.to(cardEls[i - 1], {
-          xPercent: -150,
-          opacity: 0,
-          duration: cardDur * 0.55,
-          ease: 'power2.inOut',
-        }, t);
-
-        // New card slides in from the right
-        tl.fromTo(card,
-          { xPercent: 150, opacity: 0 },
-          { xPercent: -50, opacity: 1, duration: cardDur * 0.7, ease: 'power2.out' },
-          t + cardDur * 0.15
-        );
-      });
-    });
-
-
+    // Mobile animation has been removed in favor of a native CSS horizontal scroll container.
 
 
 

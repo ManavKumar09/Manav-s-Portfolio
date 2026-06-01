@@ -116,6 +116,20 @@ export default function Contact() {
               allow="camera; microphone; autoplay; encrypted-media;"
               style={{ width: '100%', height: '900px', border: 'none' }}
             />
+            <div style={{ textAlign: 'center', marginTop: '20px', padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '12px' }}>
+              <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '15px' }}>
+                Form not loading? (Ad blockers may block it)
+              </p>
+              <a 
+                href={VISME_FORM_URL} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="contact-mobile-cta"
+                style={{ display: 'inline-block', textDecoration: 'none' }}
+              >
+                OPEN CONTACT FORM
+              </a>
+            </div>
           </div>
         </div>
       </div>
