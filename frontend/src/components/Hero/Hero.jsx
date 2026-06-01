@@ -142,10 +142,36 @@ export default function Hero() {
         0.08
       );
 
-      // Phase 3: cards snap carousel fades in (no orbit on mobile)
+      // Phase 3: cards snap carousel fades in
       tl.to('.hero-skills-stack', { opacity: 1, duration: 0.15, ease: 'power3.out' }, 0.22);
-      // Cards are already shown via CSS — no JS orbit positioning needed on mobile
+
+      // Coverflow rotation: cards tilt based on distance from center of carousel
+      const orbit = document.querySelector('.hero-skills-orbit');
+      if (orbit) {
+        const updateCoverflow = () => {
+          const orbitCards = orbit.querySelectorAll('.hero-skill-card');
+          const centerX = orbit.scrollLeft + orbit.clientWidth / 2;
+          orbitCards.forEach((card) => {
+            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+            const dist = cardCenter - centerX;
+            const maxDist = orbit.clientWidth * 0.7;
+            const ratio = Math.max(-1, Math.min(1, dist / maxDist));
+            gsap.to(card, {
+              rotateY: ratio * -45,
+              scale: 1 - Math.abs(ratio) * 0.15,
+              opacity: 1 - Math.abs(ratio) * 0.3,
+              duration: 0.15,
+              ease: 'power2.out',
+              overwrite: 'auto',
+            });
+          });
+        };
+        updateCoverflow();
+        orbit.addEventListener('scroll', updateCoverflow, { passive: true });
+        return () => orbit.removeEventListener('scroll', updateCoverflow);
+      }
     });
+
 
 
     return () => mm.revert();
