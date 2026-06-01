@@ -120,36 +120,44 @@ export default function Hero() {
     });
 
     mm.add("(max-width: 768px)", () => {
-      // Show face image (frame-0 only, no head turn on mobile)
-      gsap.set('.frame-0', { opacity: 1 });
-      gsap.set('.frame-30', { opacity: 0 });
-      gsap.set('.frame-60', { opacity: 0 });
-      gsap.set('.scroll-image-wrapper', { opacity: 1 });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: '+=120%',
+          pin: true,
+          scrub: 1,
+        }
+      });
 
-      // Show skills and about heading immediately
-      gsap.set('.hero-skills-stack', { opacity: 1 });
-      gsap.set('.hero-skills-orbit', { scale: 1, rotateX: 0 });
-      gsap.set('.gta-about-heading', { opacity: 1 });
+      // Phase 1: fade out name text and bio, face stays
+      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.1 }, 0);
+      // Fade face out (no slide on mobile — too narrow)
+      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.9, duration: 0.12 }, 0.05);
+
+      // Phase 2: ABOUT ME heading slides in from top
+      tl.fromTo('.gta-about-heading',
+        { scale: 1.1, opacity: 0, y: 15 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.18, ease: 'power4.out' },
+        0.08
+      );
+
+      // Phase 3: skill cards fade in
+      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.12, ease: 'power3.out' }, 0.22);
+      tl.to('.hero-skills-orbit', { scale: 1, rotateX: 0, duration: 0.16, ease: 'power3.out' }, 0.22);
 
       if (cards.length > 0) {
-        gsap.to(cards, {
-          opacity: 1,
-          stagger: 0.08,
-          duration: 0.6,
-          ease: 'power3.out',
-          delay: 0.3
-        });
+        tl.to(cards, { opacity: 1, stagger: 0.04, duration: 0.12, ease: 'power3.out' }, 0.26);
       }
 
-      // Gentle continuous orbit on mobile
-      gsap.to({}, {
-        duration: 20,
-        repeat: -1,
+      // Phase 4: orbit rotates with scroll
+      tl.to({}, {
+        duration: 0.55,
         ease: 'none',
         onUpdate() {
-          renderOrbit((Date.now() % 20000) / 20000);
+          renderOrbit(this.progress());
         },
-      });
+      }, 0.28);
     });
 
     return () => mm.revert();
