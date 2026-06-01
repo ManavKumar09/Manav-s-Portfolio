@@ -342,13 +342,11 @@
   }
 
   .gta-about-dummy {
-    max-width: 20rem;
-    margin-top: 16px;
-    font-size: 0.95rem;
+    display: none; /* Hide on mobile to prevent overlap with skills */
   }
 
   .hero-skills-stack {
-    top: 64%;
+    top: 55%;
     right: 0;
     left: 0;
     width: 100%;
