@@ -6,116 +6,52 @@ import './Contact.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VISME_EMBED_SCRIPT =
-  'https://static-bundles.visme.co/forms/vismeforms-embed.js';
-const VISME_FORM_OPEN_URL =
+const VISME_FORM_URL =
   'https://forms.visme.co/formsPlayer/j0noxneg-untitled-project';
-
-let vismeScriptPromise = null;
-
-function loadVismeEmbedScript() {
-  if (vismeScriptPromise) {
-    return vismeScriptPromise;
-  }
-
-  vismeScriptPromise = new Promise((resolve, reject) => {
-    const existing = document.querySelector(
-      `script[src="${VISME_EMBED_SCRIPT}"]`
-    );
-
-    if (existing) {
-      if (existing.dataset.loaded === 'true') {
-        resolve();
-        return;
-      }
-      existing.addEventListener('load', () => resolve());
-      existing.addEventListener('error', reject);
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = VISME_EMBED_SCRIPT;
-    script.async = true;
-    script.onload = () => {
-      script.dataset.loaded = 'true';
-      resolve();
-    };
-    script.onerror = reject;
-    document.body.appendChild(script);
-  });
-
-  return vismeScriptPromise;
-}
 
 export default function Contact() {
   const containerRef = useRef(null);
-  const formContainerRef = useRef(null);
-  const [embedReady, setEmbedReady] = useState(false);
-  const [scriptError, setScriptError] = useState(false);
 
-  useEffect(() => {
-    const node = formContainerRef.current;
-    if (!node) return;
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setEmbedReady(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '120px', threshold: 0.1 }
-    );
+      mm.add('(min-width: 769px)', () => {
+        gsap.fromTo(
+          '.contact-section .section-title',
+          { opacity: 0, y: 50 },
+          {
+            scrollTrigger: {
+              trigger: '.contact-section',
+              start: 'top 80%',
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out',
+          }
+        );
 
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+        gsap.fromTo(
+          '.contact-info',
+          { opacity: 0, x: -60 },
+          {
+            scrollTrigger: {
+              trigger: '.contact-grid',
+              start: 'top 85%',
+            },
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: 'power3.out',
+          }
+        );
+      });
 
-  useEffect(() => {
-    if (!embedReady) return;
-
-    let cancelled = false;
-
-    loadVismeEmbedScript().catch(() => {
-      if (!cancelled) setScriptError(true);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [embedReady]);
-
-  useGSAP(() => {
-    gsap.fromTo(
-      '.contact-section .section-title',
-      { opacity: 0, y: 50 },
-      {
-        scrollTrigger: {
-          trigger: '.contact-section',
-          start: 'top 80%',
-        },
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-      }
-    );
-
-    gsap.fromTo(
-      '.contact-info',
-      { opacity: 0, x: -60 },
-      {
-        scrollTrigger: {
-          trigger: '.contact-grid',
-          start: 'top 85%',
-        },
-        opacity: 1,
-        x: 0,
-        duration: 1,
-        ease: 'power3.out',
-      }
-    );
-  }, { scope: containerRef });
+      return () => mm.revert();
+    },
+    { scope: containerRef }
+  );
 
   return (
     <section id="contact" className="contact-section" ref={containerRef}>
@@ -170,53 +106,15 @@ export default function Contact() {
                 </svg>
               </a>
             </div>
+
           </div>
 
-          <div className="contact-form-container" ref={formContainerRef}>
-            {embedReady && !scriptError && (
-              <div
-                className="visme_d contact-visme-embed"
-                data-title="Ecommerce Registration Form Template"
-                data-url="j0noxneg-untitled-project"
-                data-domain="forms"
-                data-full-page="false"
-                data-min-height="500px"
-                data-form-id="182922"
-              />
-            )}
-
-            {!embedReady && !scriptError && (
-              <div className="contact-form-placeholder" aria-hidden="true" />
-            )}
-
-            {scriptError && (
-              <div className="contact-form-mobile">
-                <p className="contact-form-mobile-text">
-                  The form could not load. Open it directly below.
-                </p>
-                <a
-                  href={VISME_FORM_OPEN_URL}
-                  className="glow-btn contact-form-open-btn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  OPEN CONTACT FORM
-                </a>
-              </div>
-            )}
-
-            {embedReady && !scriptError && (
-              <p className="contact-form-fallback">
-                Form not loading?{' '}
-                <a
-                  href={VISME_FORM_OPEN_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Open it in a new tab
-                </a>
-              </p>
-            )}
+          <div className="contact-form-container">
+            <iframe
+              className="contact-form-iframe"
+              src={VISME_FORM_URL}
+              title="Contact Form"
+            />
           </div>
         </div>
       </div>

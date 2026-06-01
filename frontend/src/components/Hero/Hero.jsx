@@ -170,7 +170,7 @@ export default function Hero() {
       cardEls.forEach((card, i) => {
         gsap.set(card, {
           xPercent: i === 0 ? -50 : 150,
-          yPercent: -50,
+          yPercent: 0,
           opacity: i === 0 ? 1 : 0,
         });
       });
