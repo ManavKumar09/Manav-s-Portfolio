@@ -120,15 +120,13 @@ export default function Contact() {
               <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '15px' }}>
                 Form not loading? (Ad blockers may block it)
               </p>
-              <a 
-                href={VISME_FORM_URL} 
-                target="_blank" 
-                rel="noreferrer" 
+              <button 
+                onClick={() => window.location.href = VISME_FORM_URL}
                 className="contact-mobile-cta"
-                style={{ display: 'inline-block', textDecoration: 'none' }}
+                style={{ display: 'inline-block', border: 'none', cursor: 'pointer' }}
               >
                 OPEN CONTACT FORM
-              </a>
+              </button>
             </div>
           </div>
         </div>
