@@ -76,83 +76,86 @@ export default function Hero() {
       gsap.set(cards, { opacity: 0 });
     }
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: 'top top',
-        end: '+=160%',
-        pin: true,
-        scrub: 1,
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 769px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: '+=160%',
+          pin: true,
+          scrub: 1,
+        }
+      });
+
+      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -70, duration: 0.08 }, 0);
+      tl.to('.scroll-image-wrapper', { x: '18vw', scale: 0.45, rotationY: -15, z: 50, duration: 0.12 }, 0);
+      tl.to('.frame-0', { opacity: 0, duration: 0.08 }, 0);
+      tl.to('.frame-30', { opacity: 1, duration: 0.08 }, 0);
+      tl.to('.frame-30', { opacity: 0, duration: 0.08 }, 0.08);
+      tl.to('.frame-60', { opacity: 1, duration: 0.08 }, 0.08);
+      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.25, duration: 0.08 }, 0.08);
+      
+      tl.fromTo('.gta-about-heading',
+        { scale: 1.38, opacity: 0, x: '-8vw', y: 18, rotationZ: -2 },
+        { scale: 1, opacity: 1, x: 0, y: 0, rotationZ: 0, duration: 0.16, ease: 'power4.out' },
+        0.02
+      );
+
+      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.08, ease: 'power3.out' }, 0.2);
+      tl.to('.hero-skills-orbit', { scale: 1, rotateX: 0, duration: 0.14, ease: 'power3.out' }, 0.2);
+      
+      if (cards.length > 0) {
+        tl.to(cards, { opacity: 1, stagger: 0.025, duration: 0.12, ease: 'power3.out' }, 0.22);
       }
+
+      tl.to({}, {
+        duration: 0.62,
+        ease: 'none',
+        onUpdate() {
+          renderOrbit(this.progress());
+        },
+      }, 0.24);
     });
 
-    // Phase 1 (0 → 0.15): Fade out hero text, bio, contact button
-    tl.to(['.hero-bottom-container', '.hero-bg-text-container'], {
-      opacity: 0,
-      y: -70,
-      duration: 0.08
-    }, 0);
+    mm.add("(max-width: 768px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: '+=100%',
+          pin: true,
+          scrub: 1,
+        }
+      });
 
-    // Phase 2 (0 → 0.25): Face slides right + head turn
-    tl.to('.scroll-image-wrapper', {
-      x: '18vw',
-      scale: 0.45,
-      rotationY: -15,
-      z: 50,
-      duration: 0.12
-    }, 0);
+      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.1 }, 0);
+      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.8, duration: 0.15 }, 0);
+      
+      tl.fromTo('.gta-about-heading',
+        { scale: 1.1, opacity: 0, y: 20 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.2, ease: 'power4.out' },
+        0.1
+      );
 
-    // Head turn frames
-    tl.to('.frame-0', { opacity: 0, duration: 0.08 }, 0);
-    tl.to('.frame-30', { opacity: 1, duration: 0.08 }, 0);
-    tl.to('.frame-30', { opacity: 0, duration: 0.08 }, 0.08);
-    tl.to('.frame-60', { opacity: 1, duration: 0.08 }, 0.08);
+      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.15, ease: 'power3.out' }, 0.25);
+      tl.to('.hero-skills-orbit', { scale: 1, rotateX: 0, duration: 0.2, ease: 'power3.out' }, 0.25);
+      
+      if (cards.length > 0) {
+        tl.to(cards, { opacity: 1, stagger: 0.05, duration: 0.15, ease: 'power3.out' }, 0.25);
+      }
 
-    // Phase 3 (0.2 → 0.3): Face fades out completely
-    tl.to('.scroll-image-wrapper', {
-      opacity: 0,
-      scale: 0.25,
-      duration: 0.08
-    }, 0.08);
+      tl.to({}, {
+        duration: 0.5,
+        ease: 'none',
+        onUpdate() {
+          renderOrbit(this.progress());
+        },
+      }, 0.3);
+    });
 
-    // Phase 4 (0.25 → 0.38): GTA6-style "ABOUT ME" heading animates in
-    // Scale from huge to normal, slide from left
-    tl.fromTo('.gta-about-heading',
-      { scale: 1.38, opacity: 0, x: '-8vw', y: 18, rotationZ: -2 },
-      { scale: 1, opacity: 1, x: 0, y: 0, rotationZ: 0, duration: 0.16, ease: 'power4.out' },
-      0.02
-    );
-
-    // Phase 5: Skill cards bloom into a spiral and orbit while the page scrolls.
-    tl.to('.hero-skills-stack', {
-      opacity: 1,
-      duration: 0.08,
-      ease: 'power3.out'
-    }, 0.2);
-
-    tl.to('.hero-skills-orbit', {
-      scale: 1,
-      rotateX: 0,
-      duration: 0.14,
-      ease: 'power3.out'
-    }, 0.2);
-
-    if (cards.length > 0) {
-      tl.to(cards, {
-        opacity: 1,
-        stagger: 0.025,
-        duration: 0.12,
-        ease: 'power3.out'
-      }, 0.22);
-    }
-
-    tl.to({}, {
-      duration: 0.62,
-      ease: 'none',
-      onUpdate() {
-        renderOrbit(this.progress());
-      },
-    }, 0.24);
+    return () => mm.revert();
 
   }, { scope: heroRef, dependencies: [isLoading] });
 

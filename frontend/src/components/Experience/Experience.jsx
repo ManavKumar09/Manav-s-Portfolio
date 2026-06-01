@@ -31,51 +31,99 @@ export default function Experience() {
   }, { scope: containerRef }); // No dependencies, runs once
 
   useGSAP(() => {
-    // Animate each row individually (waits for data)
-    const rows = gsap.utils.toArray('.timeline-row');
-    rows.forEach((row) => {
-      const line = row.querySelector('.timeline-line');
-      const dot = row.querySelector('.timeline-dot');
-      const card = row.querySelector('.experience-card');
+    const mm = gsap.matchMedia();
 
-      // Scrubbed line drawing as you scroll past the row
-      gsap.fromTo(line, 
-        { clipPath: 'inset(0 0 100% 0)' }, 
-        { 
-          clipPath: 'inset(0 0 0% 0)', 
-          ease: 'none',
+    mm.add("(min-width: 769px)", () => {
+      // Desktop animation
+      const rows = gsap.utils.toArray('.timeline-row');
+      rows.forEach((row) => {
+        const line = row.querySelector('.timeline-line');
+        const dot = row.querySelector('.timeline-dot');
+        const card = row.querySelector('.experience-card');
+
+        gsap.fromTo(line, 
+          { clipPath: 'inset(0 0 100% 0)' }, 
+          { 
+            clipPath: 'inset(0 0 0% 0)', 
+            ease: 'none',
+            scrollTrigger: {
+              trigger: row,
+              start: 'top 50%',
+              end: 'bottom 50%',
+              scrub: 1,
+            }
+          }
+        );
+
+        gsap.set(card, { transition: 'none' });
+        gsap.set(dot, { transition: 'none', xPercent: -50, yPercent: -50 });
+
+        const rowTl = gsap.timeline({
           scrollTrigger: {
             trigger: row,
-            start: 'top 50%',
-            end: 'bottom 50%',
-            scrub: 1,
+            start: 'top 85%',
+            toggleActions: 'play reverse play reverse'
           }
-        }
-      );
+        });
 
-      // Disable CSS transitions so GSAP can smoothly reverse without glitching
-      gsap.set(card, { transition: 'none' });
-      gsap.set(dot, { transition: 'none', xPercent: -50, yPercent: -50 });
-
-      // Create a timeline for the dot and card
-      const rowTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: row,
-          start: 'top 85%',
-          toggleActions: 'play reverse play reverse'
-        }
+        rowTl.fromTo(dot, 
+          { opacity: 0, scale: 0 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }
+        )
+        .fromTo(card, 
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'back.out(1.2)' },
+          "-=0.3"
+        );
       });
-
-      rowTl.fromTo(dot, 
-        { opacity: 0, scale: 0 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }
-      )
-      .fromTo(card, 
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'back.out(1.2)' },
-        "-=0.3" // overlap the animations slightly
-      );
     });
+
+    mm.add("(max-width: 768px)", () => {
+      // Mobile animation (simpler, shorter distances)
+      const rows = gsap.utils.toArray('.timeline-row');
+      rows.forEach((row) => {
+        const line = row.querySelector('.timeline-line');
+        const dot = row.querySelector('.timeline-dot');
+        const card = row.querySelector('.experience-card');
+
+        gsap.fromTo(line, 
+          { clipPath: 'inset(0 0 100% 0)' }, 
+          { 
+            clipPath: 'inset(0 0 0% 0)', 
+            ease: 'none',
+            scrollTrigger: {
+              trigger: row,
+              start: 'top 60%',
+              end: 'bottom 40%',
+              scrub: 1,
+            }
+          }
+        );
+
+        gsap.set(card, { transition: 'none' });
+        gsap.set(dot, { transition: 'none', xPercent: -50, yPercent: -50 });
+
+        const rowTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 90%',
+            toggleActions: 'play reverse play reverse'
+          }
+        });
+
+        rowTl.fromTo(dot, 
+          { opacity: 0, scale: 0 },
+          { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
+        )
+        .fromTo(card, 
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+          "-=0.2"
+        );
+      });
+    });
+
+    return () => mm.revert();
   }, { scope: containerRef, dependencies: [experiences] });
 
   useEffect(() => {
