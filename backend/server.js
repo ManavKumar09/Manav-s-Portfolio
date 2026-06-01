@@ -42,7 +42,11 @@ app.use('/api', limiter); // Apply to all API routes
 // Configure CORS
 const allowedOrigins = [
   process.env.FRONTEND_URL || 'http://localhost:5173',
-  process.env.ADMIN_URL || 'http://localhost:5174'
+  process.env.ADMIN_URL || 'http://localhost:5174',
+  'http://localhost:5175',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174',
+  'http://127.0.0.1:5175'
 ];
 
 app.use(cors({
