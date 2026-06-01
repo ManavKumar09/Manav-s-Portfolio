@@ -59,6 +59,11 @@ function MainLayout() {
     // Disable lag smoothing in GSAP to prevent scroll desyncs
     gsap.ticker.lagSmoothing(0);
 
+    // Refresh ScrollTrigger after a short delay to account for layout shifts when overflow is restored
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
+
     return () => {
       lenis.destroy();
       gsap.ticker.remove(rafCallback);
