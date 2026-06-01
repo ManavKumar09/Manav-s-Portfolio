@@ -7,6 +7,8 @@ dotenv.config({ override: true });
 
 const path = require('path');
 
+const app = express();
+
 // Middleware
 app.use(cors());
 app.use(express.json());
