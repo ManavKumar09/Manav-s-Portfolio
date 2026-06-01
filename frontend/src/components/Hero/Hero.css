@@ -331,7 +331,7 @@
 
 @media (max-width: 768px) {
   .gta-about-heading {
-    top: 90px;
+    top: 60px;
     left: 24px;
     width: calc(100% - 48px);
     z-index: 4; /* Behind the skills stack */
@@ -342,11 +342,18 @@
   }
 
   .gta-about-dummy {
-    display: none; /* Hide on mobile to prevent overlap with skills */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 20rem;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    line-height: 1.4;
   }
 
   .hero-skills-stack {
-    top: 55%;
+    top: 70%;
     right: 0;
     left: 0;
     width: 100%;
