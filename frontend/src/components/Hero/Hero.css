@@ -331,9 +331,10 @@
 
 @media (max-width: 768px) {
   .gta-about-heading {
-    top: 106px;
+    top: 90px;
     left: 24px;
     width: calc(100% - 48px);
+    z-index: 4; /* Behind the skills stack */
   }
 
   .gta-about-text {

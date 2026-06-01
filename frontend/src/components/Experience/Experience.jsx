@@ -62,7 +62,7 @@ export default function Experience() {
           scrollTrigger: {
             trigger: row,
             start: 'top 85%',
-            toggleActions: 'play reverse play reverse'
+            toggleActions: 'play none none reverse'
           }
         });
 
@@ -107,7 +107,7 @@ export default function Experience() {
           scrollTrigger: {
             trigger: row,
             start: 'top 90%',
-            toggleActions: 'play reverse play reverse'
+            toggleActions: 'play none none reverse'
           }
         });
 
