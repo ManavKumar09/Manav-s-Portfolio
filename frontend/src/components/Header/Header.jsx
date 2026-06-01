@@ -48,7 +48,7 @@ export default function Header() {
       <header className={`header ${isScrolled ? 'scrolled' : ''} ${menuOpen ? 'menu-active' : ''}`}>
         <div className="header-container">
           <Link to="/#hero" className="logo" onClick={closeMenu}>
-            MB<span className="logo-dot">.</span>
+            MK<span className="logo-dot">.</span>
           </Link>
           <button
             className={`hamburger ${menuOpen ? 'is-active' : ''}`}

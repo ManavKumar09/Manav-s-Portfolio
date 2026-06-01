@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
 import AllProjects from './pages/AllProjects';
 import AllExperience from './pages/AllExperience';
+import Preloader from './components/Preloader/Preloader';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -33,7 +34,12 @@ function ScrollToHash() {
 }
 
 function MainLayout() {
+  const [preloaderFinished, setPreloaderFinished] = useState(false);
+
   useEffect(() => {
+    // Only initialize Lenis after the preloader finishes to prevent scrolling during load
+    if (!preloaderFinished) return;
+
     // Initialize Lenis smooth scrolling
     const lenis = new Lenis({
       duration: 1.2,
@@ -57,18 +63,22 @@ function MainLayout() {
       lenis.destroy();
       gsap.ticker.remove(rafCallback);
     };
-  }, []);
+  }, [preloaderFinished]);
 
   return (
     <>
-      <ScrollToHash />
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/projects" element={<AllProjects />} />
-        <Route path="/experience" element={<AllExperience />} />
-      </Routes>
-      <Footer />
+      {!preloaderFinished && <Preloader onComplete={() => setPreloaderFinished(true)} />}
+      
+      <div style={{ opacity: preloaderFinished ? 1 : 0, transition: 'opacity 0.5s ease', pointerEvents: preloaderFinished ? 'auto' : 'none' }}>
+        <ScrollToHash />
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<AllProjects />} />
+          <Route path="/experience" element={<AllExperience />} />
+        </Routes>
+        <Footer />
+      </div>
     </>
   );
 }
@@ -80,3 +90,4 @@ export default function App() {
     </Router>
   );
 }
+
