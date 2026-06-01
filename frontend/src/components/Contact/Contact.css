@@ -149,3 +149,23 @@
     gap: 40px;
   }
 }
+
+@media (max-width: 768px) {
+  .contact-form-container {
+    width: 100%;
+    overflow: hidden; /* clip the black margins on the sides gently */
+    position: relative;
+    height: 620px; /* comfortable height to show the entire card + inputs + submit button */
+    display: flex;
+    justify-content: center;
+  }
+
+  .contact-form-container iframe {
+    width: 100% !important;
+    height: 700px !important;
+    transform: scale(1.12) !important; /* scale the form up by 12% to make it readable and fill the screen */
+    transform-origin: center top !important; /* scale from top center */
+    border: none;
+    pointer-events: auto;
+  }
+}

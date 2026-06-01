@@ -11,6 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Hero() {
   const heroRef = useRef(null);
   const containerRef = useRef(null);
+  const aboutHeadingRef = useRef(null);
+  const skillsStackRef = useRef(null);
 
   const [skills, setSkills] = useState([]);
   const [profile, setProfile] = useState(null);
@@ -33,6 +35,46 @@ export default function Hero() {
     };
     fetchData();
   }, []);
+
+  // Dynamically position skill cards below the about heading on mobile
+  useEffect(() => {
+    if (isLoading) return;
+
+    const positionSkillsStack = () => {
+      if (window.innerWidth > 768) return; // only on mobile
+      const headingEl = aboutHeadingRef.current;
+      const stackEl = skillsStackRef.current;
+      if (!headingEl || !stackEl) return;
+
+      const headingRect = headingEl.getBoundingClientRect();
+      const heroRect = heroRef.current?.getBoundingClientRect();
+      if (!heroRect) return;
+
+      // The heading's bottom relative to the hero section + a gap
+      const relativeBottom = headingRect.bottom - heroRect.top;
+      const gap = 20;
+      stackEl.style.top = `${relativeBottom + gap}px`;
+    };
+
+    // Run once after paint
+    const raf = requestAnimationFrame(positionSkillsStack);
+
+    // Re-run on resize
+    window.addEventListener('resize', positionSkillsStack);
+
+    // Re-run if the heading content changes size (e.g., fonts load)
+    let observer;
+    if (aboutHeadingRef.current && typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver(positionSkillsStack);
+      observer.observe(aboutHeadingRef.current);
+    }
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', positionSkillsStack);
+      observer?.disconnect();
+    };
+  }, [isLoading]);
 
   const getIcon = (iconName) => {
     const IconComponent = LucideIcons[iconName] || LucideIcons.Code;
@@ -212,7 +254,7 @@ export default function Hero() {
       </div>
 
       {/* GTA6-style ABOUT ME heading — left side */}
-      <div id="about" className="gta-about-heading">
+      <div id="about" className="gta-about-heading" ref={aboutHeadingRef}>
         <h2 className="gta-about-text">
           <span>ABOUT</span>
           <span>ME</span>
@@ -223,7 +265,7 @@ export default function Hero() {
       </div>
 
       {/* Skill cards — stacking from right to left, positioned on right side */}
-      <div className="hero-skills-stack">
+      <div className="hero-skills-stack" ref={skillsStackRef}>
         <div className="hero-skills-orbit">
           {skills.map((skill, index) => (
             <article
