@@ -396,21 +396,53 @@
     color: var(--text-secondary);
   }
 
-  /* Skill cards — keep absolute, positioned in bottom half */
+  /* Skill cards — horizontal swipe carousel on mobile */
   .hero-skills-stack {
     position: absolute;
-    top: 58%;
+    top: 60%;
     right: 0;
     left: 0;
     width: 100%;
-    height: 46vh;
+    height: 220px;
     transform: translateY(0);
+    perspective: none;
+    transform-style: flat;
+  }
+
+  .hero-skills-orbit {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 14px;
+    padding: 0 20px 12px;
+    width: 100%;
+    height: 100%;
+    inset: unset;
+    transform: none !important;
+    transform-style: flat;
+    scrollbar-width: none;
+  }
+
+  .hero-skills-orbit::-webkit-scrollbar {
+    display: none;
   }
 
   .hero-skill-card {
-    width: min(66vw, 250px);
-    min-height: 130px;
-    padding: 13px;
+    position: relative;
+    top: unset;
+    left: unset;
+    flex-shrink: 0;
+    width: 72vw;
+    max-width: 260px;
+    min-height: 170px;
+    scroll-snap-align: center;
+    transform: none !important;
+    opacity: 1 !important;
+    padding: 16px;
   }
 
   .hero-skill-card .skill-desc {

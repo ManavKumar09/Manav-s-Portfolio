@@ -72,7 +72,8 @@ export default function Hero() {
     renderOrbit(0);
     gsap.set('.hero-skills-stack', { opacity: 0 });
     gsap.set('.hero-skills-orbit', { scale: 0.78, rotateX: 12, transformOrigin: '50% 50%' });
-    if (cards.length > 0) {
+    // Only hide cards on desktop — mobile uses CSS carousel (cards always visible)
+    if (window.innerWidth > 768 && cards.length > 0) {
       gsap.set(cards, { opacity: 0 });
     }
 
@@ -130,35 +131,22 @@ export default function Hero() {
         }
       });
 
-      // Phase 1: fade out name text and bio, face stays
+      // Phase 1: fade out name text and bio on scroll
       tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.1 }, 0);
-      // Fade face out (no slide on mobile — too narrow)
       tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.9, duration: 0.12 }, 0.05);
 
-      // Phase 2: ABOUT ME heading slides in from top
+      // Phase 2: ABOUT ME heading slides in
       tl.fromTo('.gta-about-heading',
         { scale: 1.1, opacity: 0, y: 15 },
         { scale: 1, opacity: 1, y: 0, duration: 0.18, ease: 'power4.out' },
         0.08
       );
 
-      // Phase 3: skill cards fade in
-      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.12, ease: 'power3.out' }, 0.22);
-      tl.to('.hero-skills-orbit', { scale: 1, rotateX: 0, duration: 0.16, ease: 'power3.out' }, 0.22);
-
-      if (cards.length > 0) {
-        tl.to(cards, { opacity: 1, stagger: 0.04, duration: 0.12, ease: 'power3.out' }, 0.26);
-      }
-
-      // Phase 4: orbit rotates with scroll
-      tl.to({}, {
-        duration: 0.55,
-        ease: 'none',
-        onUpdate() {
-          renderOrbit(this.progress());
-        },
-      }, 0.28);
+      // Phase 3: cards snap carousel fades in (no orbit on mobile)
+      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.15, ease: 'power3.out' }, 0.22);
+      // Cards are already shown via CSS — no JS orbit positioning needed on mobile
     });
+
 
     return () => mm.revert();
 
