@@ -1,10 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
+
+// Strict Rate Limiting for Login to prevent brute force
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 login requests per `window`
+  message: 'Too many login attempts from this IP, please try again after 15 minutes',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // @route   POST /api/auth/login
 // @desc    Authenticate user & get token directly from .env variables
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -19,9 +29,14 @@ router.post('/login', async (req, res) => {
       }
     };
 
+    if (!process.env.JWT_SECRET) {
+      console.error('CRITICAL: JWT_SECRET is not defined in environment variables.');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
     jwt.sign(
       payload,
-      process.env.JWT_SECRET || 'supersecret',
+      process.env.JWT_SECRET,
       { expiresIn: '5d' },
       (err, token) => {
         if (err) throw err;

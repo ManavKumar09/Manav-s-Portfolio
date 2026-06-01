@@ -53,21 +53,27 @@ export default function Experience() {
         }
       );
 
-      // Pop in the dot and card when the row enters the viewport
-      gsap.fromTo([dot, card], 
-        { opacity: 0, y: 40 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          stagger: 0.15,
-          duration: 0.8,
-          ease: 'back.out(1.2)',
-          scrollTrigger: {
-            trigger: row,
-            start: 'top 80%',
-            toggleActions: 'play reverse play reverse'
-          }
+      // Disable CSS transitions so GSAP can smoothly reverse without glitching
+      gsap.set(card, { transition: 'none' });
+      gsap.set(dot, { transition: 'none', xPercent: -50, yPercent: -50 });
+
+      // Create a timeline for the dot and card
+      const rowTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: row,
+          start: 'top 85%',
+          toggleActions: 'play reverse play reverse'
         }
+      });
+
+      rowTl.fromTo(dot, 
+        { opacity: 0, scale: 0 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }
+      )
+      .fromTo(card, 
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'back.out(1.2)' },
+        "-=0.3" // overlap the animations slightly
       );
     });
   }, { scope: containerRef, dependencies: [experiences] });
