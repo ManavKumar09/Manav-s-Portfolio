@@ -120,39 +120,30 @@ export default function Hero() {
     });
 
     mm.add("(max-width: 768px)", () => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: '+=100%',
-          pin: true,
-          scrub: 1,
-        }
-      });
+      // On mobile: no pinning, just reveal the elements immediately
+      gsap.set('.hero-skills-stack', { opacity: 1 });
+      gsap.set('.hero-skills-orbit', { scale: 1, rotateX: 0 });
+      gsap.set('.gta-about-heading', { opacity: 1 });
 
-      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.1 }, 0);
-      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.8, duration: 0.15 }, 0);
-      
-      tl.fromTo('.gta-about-heading',
-        { scale: 1.1, opacity: 0, y: 20 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.2, ease: 'power4.out' },
-        0.1
-      );
-
-      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.15, ease: 'power3.out' }, 0.25);
-      tl.to('.hero-skills-orbit', { scale: 1, rotateX: 0, duration: 0.2, ease: 'power3.out' }, 0.25);
-      
       if (cards.length > 0) {
-        tl.to(cards, { opacity: 1, stagger: 0.05, duration: 0.15, ease: 'power3.out' }, 0.25);
+        gsap.to(cards, {
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: 'power3.out',
+          delay: 0.3
+        });
       }
 
-      tl.to({}, {
-        duration: 0.5,
+      // Gentle continuous orbit on mobile
+      gsap.to({}, {
+        duration: 20,
+        repeat: -1,
         ease: 'none',
         onUpdate() {
-          renderOrbit(this.progress());
+          renderOrbit((Date.now() % 20000) / 20000);
         },
-      }, 0.3);
+      });
     });
 
     return () => mm.revert();
