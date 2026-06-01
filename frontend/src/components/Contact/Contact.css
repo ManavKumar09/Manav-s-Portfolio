@@ -64,6 +64,35 @@
 .contact-form-container {
   padding: 0;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-form-iframe {
+  display: block;
+  width: 100%;
+  height: 900px;
+  border: none;
+  background: transparent;
+  border-radius: 15px;
+}
+
+.contact-form-fallback {
+  display: none;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.contact-form-fallback a {
+  color: var(--accent-pink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contact-form-fallback a:hover {
+  color: var(--text-primary);
 }
 
 .contact-form {
@@ -151,21 +180,17 @@
 }
 
 @media (max-width: 768px) {
-  .contact-form-container {
-    width: 100%;
-    overflow: hidden; /* clip the black margins on the sides gently */
-    position: relative;
-    height: 620px; /* comfortable height to show the entire card + inputs + submit button */
-    display: flex;
-    justify-content: center;
+  .contact-section {
+    padding-bottom: 80px;
   }
 
-  .contact-form-container iframe {
-    width: 100% !important;
-    height: 700px !important;
-    transform: scale(1.12) !important; /* scale the form up by 12% to make it readable and fill the screen */
-    transform-origin: center top !important; /* scale from top center */
-    border: none;
-    pointer-events: auto;
+  .contact-form-iframe {
+    height: 720px;
+    min-height: 720px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .contact-form-fallback {
+    display: block;
   }
 }

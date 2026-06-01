@@ -6,6 +6,9 @@ import './Contact.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const VISME_FORM_URL =
+  'https://forms.visme.co/formsPlayer/j0noxneg-untitled-project';
+
 export default function Contact() {
   const containerRef = useRef(null);
 
@@ -40,18 +43,18 @@ export default function Contact() {
       }
     );
 
-    // Slide in contact form from right
-    gsap.fromTo('.contact-form-container', 
-      { opacity: 0, x: 60 },
+    // Fade in form only — transform on iframe parents breaks mobile browsers
+    gsap.fromTo(
+      '.contact-form-container',
+      { opacity: 0 },
       {
         scrollTrigger: {
           trigger: '.contact-grid',
           start: 'top 85%',
         },
         opacity: 1,
-        x: 0,
         duration: 1,
-        ease: 'power3.out'
+        ease: 'power3.out',
       }
     );
   }, { scope: containerRef });
@@ -94,12 +97,20 @@ export default function Contact() {
           </div>
 
           {/* Right: Contact Form */}
-          <div className="contact-form-container" style={{ width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
-            <iframe 
-              src="https://forms.visme.co/formsPlayer/j0noxneg-untitled-project"
-              style={{ width: '100%', height: '900px', border: 'none', background: 'transparent', borderRadius: '15px' }}
+          <div className="contact-form-container">
+            <iframe
+              className="contact-form-iframe"
+              src={VISME_FORM_URL}
               title="Contact Form"
-            ></iframe>
+              loading="eager"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <p className="contact-form-fallback">
+              Form not loading?{' '}
+              <a href={VISME_FORM_URL} target="_blank" rel="noopener noreferrer">
+                Open it in a new tab
+              </a>
+            </p>
           </div>
         </div>
       </div>
