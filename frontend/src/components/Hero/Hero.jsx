@@ -121,56 +121,63 @@ export default function Hero() {
     });
 
     mm.add("(max-width: 768px)", () => {
+      const orbit = document.querySelector('.hero-skills-orbit');
+
+      const updateCoverflow = () => {
+        if (!orbit) return;
+        const orbitCards = orbit.querySelectorAll('.hero-skill-card');
+        const centerX = orbit.scrollLeft + orbit.clientWidth / 2;
+        orbitCards.forEach((card) => {
+          const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+          const dist = cardCenter - centerX;
+          const maxDist = orbit.clientWidth * 0.7;
+          const ratio = Math.max(-1, Math.min(1, dist / maxDist));
+          gsap.set(card, {
+            rotateY: ratio * -50,
+            scale: 1 - Math.abs(ratio) * 0.18,
+            opacity: 1 - Math.abs(ratio) * 0.35,
+          });
+        });
+      };
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: heroRef.current,
           start: 'top top',
-          end: '+=120%',
+          end: '+=200%',
           pin: true,
           scrub: 1,
+          onUpdate: (self) => {
+            // Phase 0-0.15: fade out name/face
+            // Phase 0.15+: drive horizontal card scroll
+            if (self.progress > 0.15 && orbit) {
+              const cardProgress = (self.progress - 0.15) / 0.85;
+              const maxScroll = orbit.scrollWidth - orbit.clientWidth;
+              orbit.scrollLeft = cardProgress * maxScroll;
+              updateCoverflow();
+            }
+          }
         }
       });
 
-      // Phase 1: fade out name text and bio on scroll
+      // Phase 1: fade out name text, bio, face
       tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.1 }, 0);
       tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.9, duration: 0.12 }, 0.05);
 
-      // Phase 2: ABOUT ME heading slides in
+      // Phase 2: ABOUT ME heading + cards appear
       tl.fromTo('.gta-about-heading',
         { scale: 1.1, opacity: 0, y: 15 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.18, ease: 'power4.out' },
+        { scale: 1, opacity: 1, y: 0, duration: 0.15, ease: 'power4.out' },
         0.08
       );
+      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.1, ease: 'power3.out' }, 0.15);
 
-      // Phase 3: cards snap carousel fades in
-      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.15, ease: 'power3.out' }, 0.22);
+      // Run initial coverflow state
+      updateCoverflow();
 
-      // Coverflow rotation: cards tilt based on distance from center of carousel
-      const orbit = document.querySelector('.hero-skills-orbit');
-      if (orbit) {
-        const updateCoverflow = () => {
-          const orbitCards = orbit.querySelectorAll('.hero-skill-card');
-          const centerX = orbit.scrollLeft + orbit.clientWidth / 2;
-          orbitCards.forEach((card) => {
-            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-            const dist = cardCenter - centerX;
-            const maxDist = orbit.clientWidth * 0.7;
-            const ratio = Math.max(-1, Math.min(1, dist / maxDist));
-            gsap.to(card, {
-              rotateY: ratio * -45,
-              scale: 1 - Math.abs(ratio) * 0.15,
-              opacity: 1 - Math.abs(ratio) * 0.3,
-              duration: 0.15,
-              ease: 'power2.out',
-              overwrite: 'auto',
-            });
-          });
-        };
-        updateCoverflow();
-        orbit.addEventListener('scroll', updateCoverflow, { passive: true });
-        return () => orbit.removeEventListener('scroll', updateCoverflow);
-      }
+      return () => {};
     });
+
 
 
 
