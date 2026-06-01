@@ -12,6 +12,18 @@ const VISME_FORM_URL =
 export default function Contact() {
   const containerRef = useRef(null);
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://static-web.visme.co/visme-embed.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
@@ -110,11 +122,15 @@ export default function Contact() {
           </div>
 
           <div className="contact-form-container">
-            <iframe
-              className="contact-form-iframe"
-              src={VISME_FORM_URL}
-              title="Contact Form"
-            />
+            <div
+              className="visme_d"
+              data-title="Untitled Project"
+              data-url="j0noxneg-untitled-project"
+              data-domain="forms"
+              data-full-page="false"
+              data-min-height="500px"
+              data-form-id="36528"
+            ></div>
           </div>
         </div>
       </div>
