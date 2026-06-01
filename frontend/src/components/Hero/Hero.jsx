@@ -120,7 +120,13 @@ export default function Hero() {
     });
 
     mm.add("(max-width: 768px)", () => {
-      // On mobile: no pinning, just reveal the elements immediately
+      // Show face image (frame-0 only, no head turn on mobile)
+      gsap.set('.frame-0', { opacity: 1 });
+      gsap.set('.frame-30', { opacity: 0 });
+      gsap.set('.frame-60', { opacity: 0 });
+      gsap.set('.scroll-image-wrapper', { opacity: 1 });
+
+      // Show skills and about heading immediately
       gsap.set('.hero-skills-stack', { opacity: 1 });
       gsap.set('.hero-skills-orbit', { scale: 1, rotateX: 0 });
       gsap.set('.gta-about-heading', { opacity: 1 });
