@@ -410,8 +410,8 @@
    * The CSS fallback uses a generous top that works for most text lengths.
    */
   .hero-skills-stack {
-    position: absolute !important;
-    top: var(--skills-top, 50%) !important;
+    position: relative !important;
+    top: auto !important;
     left: 0 !important;
     width: 100vw !important;
     height: 200px !important;
@@ -419,17 +419,13 @@
     perspective: none !important;
     display: flex !important;
     flex-direction: row !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    gap: 16px !important;
+    overflow: hidden !important;
     padding: 0 8vw !important;
     box-sizing: border-box !important;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* Firefox */
   }
   
   .hero-skills-stack::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
   }
 
   .hero-skills-orbit {
@@ -450,8 +446,7 @@
     min-height: 140px !important;
     transform: none !important;
     flex-shrink: 0 !important;
-    scroll-snap-align: center;
-    opacity: 1 !important; /* Ensure visible since GSAP is removed */
+    opacity: 1 !important;
   }
 
   .hero-skill-card .skill-icon-container {

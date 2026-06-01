@@ -161,7 +161,52 @@ export default function Hero() {
         },
       }, 0.24);
     });
-    // Mobile animation has been removed in favor of a native CSS horizontal scroll container.
+    mm.add("(max-width: 768px)", () => {
+      const orbitEl = document.querySelector('.hero-skills-orbit');
+      const numCards = skills.length;
+      
+      const totalEnd = `+=${100 + numCards * 50}%`;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: totalEnd,
+          pin: true,
+          scrub: 1,
+        }
+      });
+
+      // Phase 1: fade out face + name text
+      tl.to(['.hero-bottom-container', '.hero-bg-text-container'], { opacity: 0, y: -30, duration: 0.1 }, 0);
+      tl.to('.scroll-image-wrapper', { opacity: 0, scale: 0.92, duration: 0.1 }, 0.05);
+
+      // Phase 2: ABOUT ME heading appears
+      tl.fromTo('.gta-about-heading',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.1, ease: 'power3.out' },
+        0.1
+      );
+      
+      // Make sure stack container is fully visible
+      tl.to('.hero-skills-stack', { opacity: 1, duration: 0.1 }, 0.15);
+
+      // Phase 3: Scroll the flex container horizontally
+      if (orbitEl) {
+        // Calculate the maximum scroll distance
+        const maxScroll = () => {
+          // padding/margins + scrollWidth - viewport width
+          const paddingOffset = window.innerWidth * 0.16; // 8vw on each side
+          return -(orbitEl.scrollWidth + paddingOffset - window.innerWidth);
+        };
+        
+        tl.to(orbitEl, {
+          x: maxScroll,
+          ease: 'none',
+          duration: 0.65
+        }, 0.25);
+      }
+    });
 
 
 
