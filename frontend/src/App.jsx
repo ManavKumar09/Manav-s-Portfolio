@@ -83,6 +83,13 @@ function MainLayout() {
           <Route path="/experience" element={<AllExperience />} />
         </Routes>
         <Footer />
+        
+        {/* Sticky Resume Button */}
+        <div className="sticky-resume-btn-container">
+          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="glow-btn">
+            View Resume
+          </a>
+        </div>
       </div>
     </>
   );
