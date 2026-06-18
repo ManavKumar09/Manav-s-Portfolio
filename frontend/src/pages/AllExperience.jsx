@@ -29,7 +29,7 @@ export default function AllExperience() {
   useEffect(() => {
     const fetchExperience = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/public/experience`);
+        const res = await axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/public/experience`);
         setDetailedExperiences(res.data);
       } catch (err) {
         console.error('Error fetching experience:', err);

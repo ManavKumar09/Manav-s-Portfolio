@@ -57,9 +57,9 @@ export default function ExperienceForm({ expToEdit, onSuccess, onCancel }) {
 
     try {
       if (expToEdit) {
-        await axios.put(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/experience/${expToEdit._id}`, data, config);
+        await axios.put(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/admin/experience/${expToEdit._id}`, data, config);
       } else {
-        await axios.post(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/experience`, data, config);
+        await axios.post(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/admin/experience`, data, config);
       }
       onSuccess();
     } catch (err) {

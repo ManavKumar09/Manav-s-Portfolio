@@ -31,9 +31,9 @@ export default function SkillForm({ skillToEdit, onSuccess, onCancel }) {
     
     try {
       if (skillToEdit) {
-        await axios.put(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/skills/${skillToEdit._id}`, formData, config);
+        await axios.put(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/admin/skills/${skillToEdit._id}`, formData, config);
       } else {
-        await axios.post(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/skills`, formData, config);
+        await axios.post(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/admin/skills`, formData, config);
       }
       onSuccess();
     } catch (err) {

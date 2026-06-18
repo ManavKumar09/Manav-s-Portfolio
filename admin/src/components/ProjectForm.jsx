@@ -71,9 +71,9 @@ export default function ProjectForm({ projectToEdit, onSuccess, onCancel }) {
 
     try {
       if (projectToEdit) {
-        await axios.put(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/projects/${projectToEdit._id}`, data, config);
+        await axios.put(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/admin/projects/${projectToEdit._id}`, data, config);
       } else {
-        await axios.post(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio.onrender.com'}/api/admin/projects`, data, config);
+        await axios.post(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/admin/projects`, data, config);
       }
       onSuccess();
     } catch (err) {
