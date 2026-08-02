@@ -25,7 +25,8 @@ if (process.env.CLOUDINARY_CLOUD_NAME) {
     cloudinary: cloudinary,
     params: {
       folder: 'portfolio',
-      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'pdf', 'gif']
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'pdf', 'gif'],
+      resource_type: 'auto'
     }
   });
 } else {
