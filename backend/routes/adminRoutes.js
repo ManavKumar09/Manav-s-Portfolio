@@ -216,16 +216,24 @@ router.get('/profile', async (req, res) => {
   }
 });
 
-router.put('/profile', async (req, res) => {
+router.put('/profile', upload.single('resume'), async (req, res) => {
   try {
     const { aboutText } = req.body;
     let profile = await Profile.findOne();
     
+    let newResumeUrl = null;
+    if (req.file) {
+      newResumeUrl = req.file.path.startsWith('http') ? req.file.path : `http://localhost:5000/uploads/${req.file.filename}`;
+    }
+    
     if (!profile) {
-      profile = new Profile({ aboutText });
+      profile = new Profile({ aboutText, resumeUrl: newResumeUrl || '' });
       await profile.save();
     } else {
       profile.aboutText = aboutText;
+      if (newResumeUrl) {
+        profile.resumeUrl = newResumeUrl;
+      }
       await profile.save();
     }
     

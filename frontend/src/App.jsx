@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
@@ -35,6 +36,22 @@ function ScrollToHash() {
 
 function MainLayout() {
   const [preloaderFinished, setPreloaderFinished] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState('/resume.pdf');
+
+  useEffect(() => {
+    // Fetch profile to get dynamic resume URL
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.DEV ? 'http://localhost:5000' : 'https://manav-s-portfolio-63db.vercel.app'}/api/public/profile`);
+        if (res.data && res.data.resumeUrl) {
+          setResumeUrl(res.data.resumeUrl);
+        }
+      } catch (err) {
+        console.error('Error fetching profile', err);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   useEffect(() => {
     // Only initialize Lenis after the preloader finishes to prevent scrolling during load
@@ -86,7 +103,7 @@ function MainLayout() {
         
         {/* Sticky Resume Button */}
         <div className="sticky-resume-btn-container">
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="glow-btn">
+          <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="glow-btn">
             View Resume
           </a>
         </div>
